@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +8,8 @@ import { CarComponent } from './car/car.component';
 import { CarEditComponent } from './car-edit/car-edit.component';
 import { FormsModule } from '@angular/forms';
 import { CarCreateComponent } from './car-create/car-create.component';
+import { LoginComponent } from './login/login.component';
+import { CustomInterceptor } from './service/customInterceptor';
 
 const appRoutes: Routes = [
   { path: 'cars', component: CarComponent },
@@ -20,7 +22,8 @@ const appRoutes: Routes = [
     AppComponent,
     CarComponent,
     CarEditComponent,
-    CarCreateComponent
+    CarCreateComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -29,7 +32,13 @@ const appRoutes: Routes = [
     RouterModule.forRoot(appRoutes),
     FormsModule
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: CustomInterceptor,
+      multi: true,
+    },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule {
